@@ -67,7 +67,7 @@ defmodule Hedwig.Adapters.Console do
       {user, 0} = System.cmd("whoami", [])
       clear_screen()
       display_banner()
-      Task.start_link(__MODULE__, :loop, [self, String.strip(user), opts[:name]])
+      Task.start_link(__MODULE__, :loop, [self(), String.strip(user), opts[:name]])
     end
 
     def loop(owner, user, name) do

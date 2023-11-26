@@ -4,7 +4,7 @@ defmodule Hedwig.TestRobot do
   use Hedwig.Robot, otp_app: :hedwig, adapter: Hedwig.Adapters.Test
 
   def after_connect(%{name: name} = robot) do
-    Hedwig.Robot.register(self, name)
+    Hedwig.Robot.register(self(), name)
     {:ok, robot}
   end
 

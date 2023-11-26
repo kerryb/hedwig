@@ -59,7 +59,7 @@ defmodule Hedwig.Adapter do
 
   @doc false
   def start_link(module, opts) do
-    GenServer.start_link(module, {self, opts})
+    GenServer.start_link(module, {self(), opts})
   end
 
   @type robot :: pid

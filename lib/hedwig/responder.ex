@@ -217,12 +217,12 @@ defmodule Hedwig.Responder do
       @doc false
       def install(robot, opts) do
         hearers =
-          __hearers__
+          __hearers__()
           |> Enum.map(&install_hearer(&1, robot, opts))
           |> Enum.map(&Task.await/1)
 
         responders =
-          __responders__
+          __responders__()
           |> Enum.map(&install_responder(&1, robot, opts))
           |> Enum.map(&Task.await/1)
 

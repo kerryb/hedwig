@@ -87,7 +87,7 @@ defmodule Hedwig.Robot do
         responders = Keyword.get(opts, :responders, [])
 
         unless responders == [] do
-          GenServer.cast(self, :install_responders)
+          GenServer.cast(self(), :install_responders)
         end
 
         state = %Hedwig.Robot{

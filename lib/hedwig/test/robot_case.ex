@@ -34,7 +34,7 @@ defmodule Hedwig.RobotCase do
   end
 
   def update_robot_adapter(robot) do
-    current = self
+    current = self()
     adapter = :sys.get_state(robot).adapter
     :sys.replace_state(adapter, fn state -> %{state | conn: current} end)
 
