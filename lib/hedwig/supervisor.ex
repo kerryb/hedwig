@@ -9,7 +9,7 @@ defmodule Hedwig.Supervisor do
 
   def init(:ok) do
     children = [
-      supervisor(Hedwig.Robot.Supervisor, [[name: Hedwig.Robot.Supervisor]]),
+      supervisor(Hedwig.Robot.Supervisor, [[name: Hedwig.Robot.Supervisor]])
     ]
 
     supervise(children, strategy: :one_for_one)

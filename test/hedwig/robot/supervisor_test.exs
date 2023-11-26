@@ -15,6 +15,7 @@ defmodule Hedwig.ConfigTest do
 
   test "parse config (missing adapter keyword)" do
     opts = [otp_app: :alfred]
+
     assert_raise ArgumentError, fn ->
       Hedwig.Robot.Supervisor.parse_config(Alfred.Robot, opts)
     end
@@ -22,6 +23,7 @@ defmodule Hedwig.ConfigTest do
 
   test "parse config (missing adapter code)" do
     opts = [otp_app: :alfred, adapter: Hedwig.Adapters.NoSuchAdapter]
+
     assert_raise ArgumentError, fn ->
       Hedwig.Robot.Supervisor.parse_config(Alfred.Robot, opts)
     end

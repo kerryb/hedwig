@@ -48,9 +48,9 @@ defmodule Hedwig.Responder do
       import unquote(__MODULE__)
       import Kernel, except: [send: 2]
 
-      Module.register_attribute __MODULE__, :hear, accumulate: true
-      Module.register_attribute __MODULE__, :respond, accumulate: true
-      Module.register_attribute __MODULE__, :usage, accumulate: true
+      Module.register_attribute(__MODULE__, :hear, accumulate: true)
+      Module.register_attribute(__MODULE__, :respond, accumulate: true)
+      Module.register_attribute(__MODULE__, :usage, accumulate: true)
 
       @before_compile unquote(__MODULE__)
     end
@@ -97,7 +97,7 @@ defmodule Hedwig.Responder do
       send msg, random(["apples", "bananas", "carrots"])
   """
   def random(list) do
-    :rand.seed(:exsplus, :os.timestamp)
+    :rand.seed(:exsplus, :os.timestamp())
     Enum.random(list)
   end
 
@@ -119,11 +119,13 @@ defmodule Hedwig.Responder do
 
   defp find_matches(regex, text) do
     case Regex.names(regex) do
-      []  ->
+      [] ->
         matches = Regex.run(regex, text)
+
         Enum.reduce(Enum.with_index(matches), %{}, fn {match, index}, acc ->
           Map.put(acc, index, match)
         end)
+
       _ ->
         Regex.named_captures(regex, text)
     end
@@ -140,6 +142,7 @@ defmodule Hedwig.Responder do
   """
   defmacro hear(regex, msg, opts \\ Macro.escape(%{}), do: block) do
     name = unique_name(:hear)
+
     quote do
       @hear {unquote(regex), unquote(name)}
       @doc false
@@ -163,6 +166,7 @@ defmodule Hedwig.Responder do
   """
   defmacro respond(regex, msg, opts \\ Macro.escape(%{}), do: block) do
     name = unique_name(:respond)
+
     quote do
       @respond {unquote(regex), unquote(name)}
       @doc false
@@ -179,7 +183,7 @@ defmodule Hedwig.Responder do
   @doc false
   def respond_pattern(pattern, robot) do
     pattern
-    |> Regex.source
+    |> Regex.source()
     |> rewrite_source(robot.name, robot.aka)
     |> Regex.compile!(Regex.opts(pattern))
   end
@@ -187,6 +191,7 @@ defmodule Hedwig.Responder do
   defp rewrite_source(source, name, nil) do
     "^\\s*[@]?#{name}[:,]?\\s*(?:#{source})"
   end
+
   defp rewrite_source(source, name, aka) do
     [a, b] = if String.length(name) > String.length(aka), do: [name, aka], else: [aka, name]
     "^\\s*[@]?(?:#{a}[:,]?|#{b}[:,]?)\\s*(?:#{source})"
@@ -198,7 +203,7 @@ defmodule Hedwig.Responder do
       def usage(name) do
         @usage
         |> Enum.map(&String.strip/1)
-        |> Enum.map(&(String.replace(&1, "hedwig", name)))
+        |> Enum.map(&String.replace(&1, "hedwig", name))
       end
 
       def __hearers__ do

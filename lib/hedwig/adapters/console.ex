@@ -73,9 +73,9 @@ defmodule Hedwig.Adapters.Console do
     def loop(owner, user, name) do
       user
       |> prompt
-      |> IO.ANSI.format
-      |> IO.gets
-      |> String.strip
+      |> IO.ANSI.format()
+      |> IO.gets()
+      |> String.strip()
       |> send_to_adapter(owner, name)
 
       loop(owner, user, name)
@@ -99,7 +99,7 @@ defmodule Hedwig.Adapters.Console do
     ## IO
 
     defp print(message) do
-      message |> IO.ANSI.format |> IO.puts
+      message |> IO.ANSI.format() |> IO.puts()
     end
 
     defp prompt(name) do
@@ -107,22 +107,23 @@ defmodule Hedwig.Adapters.Console do
     end
 
     defp clear_screen do
-      print [:clear, :home]
+      print([:clear, :home])
     end
 
     defp handle_result(nil, _name), do: nil
+
     defp handle_result(msg, name) do
-      print prompt(name) ++ [:yellow, msg.text, :default_color]
+      print(prompt(name) ++ [:yellow, msg.text, :default_color])
     end
 
     defp display_banner do
-      print """
+      print("""
       Hedwig Console - press Ctrl+C to exit.
 
       The console adapter is useful for quickly verifying how your
       bot will respond based on the current installed responders
 
-      """
+      """)
     end
   end
 end

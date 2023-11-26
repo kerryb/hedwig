@@ -4,9 +4,9 @@ defmodule Hedwig.User do
   """
 
   @type t :: %__MODULE__{
-    id: binary,
-    name: binary
-  }
+          id: binary,
+          name: binary
+        }
 
   defstruct id: nil,
             name: nil

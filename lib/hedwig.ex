@@ -16,7 +16,7 @@ defmodule Hedwig do
 
   @doc false
   def start(_type, _args) do
-    Hedwig.Supervisor.start_link
+    Hedwig.Supervisor.start_link()
   end
 
   @doc """

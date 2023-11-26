@@ -51,7 +51,7 @@ defmodule Hedwig.Robot do
 
       @adapter adapter
       @before_compile adapter
-      @config  robot_config
+      @config robot_config
       @log_level robot_config[:log_level] || :debug
       @otp_app otp_app
 
@@ -68,9 +68,12 @@ defmodule Hedwig.Robot do
       end
 
       def log(msg) do
-        Logger.unquote(@log_level)(fn ->
-          "#{inspect msg}"
-        end, [])
+        Logger.unquote(@log_level)(
+          fn ->
+            "#{inspect(msg)}"
+          end,
+          []
+        )
       end
 
       def __adapter__, do: @adapter
@@ -79,9 +82,9 @@ defmodule Hedwig.Robot do
         opts = Keyword.merge(robot.config, opts)
         {:ok, adapter} = @adapter.start_link(robot, opts)
 
-        {aka, opts}   = Keyword.pop(opts, :aka)
-        {name, opts}  = Keyword.pop(opts, :name)
-        responders    = Keyword.get(opts, :responders, [])
+        {aka, opts} = Keyword.pop(opts, :aka)
+        {name, opts} = Keyword.pop(opts, :name)
+        responders = Keyword.get(opts, :responders, [])
 
         unless responders == [] do
           GenServer.cast(self, :install_responders)
@@ -99,16 +102,18 @@ defmodule Hedwig.Robot do
       end
 
       def after_connect(state) do
-        Logger.warn """
-        #{inspect __MODULE__}.after_connect/1 default handler invoked.
-        """
+        Logger.warn("""
+        #{inspect(__MODULE__)}.after_connect/1 default handler invoked.
+        """)
+
         {:ok, state}
       end
 
       def handle_in(msg, state) do
-        Logger.warn """
-        #{inspect __MODULE__}.handle_in/2 default handler invoked.
-        """
+        Logger.warn("""
+        #{inspect(__MODULE__)}.handle_in/2 default handler invoked.
+        """)
+
         {:ok, state}
       end
 
@@ -149,9 +154,10 @@ defmodule Hedwig.Robot do
 
       def handle_cast(:install_responders, %{opts: opts} = state) do
         responders =
-          Enum.reduce opts[:responders], [], fn {mod, opts}, acc ->
+          Enum.reduce(opts[:responders], [], fn {mod, opts}, acc ->
             mod.install(state, opts) ++ acc
-          end
+          end)
+
         {:noreply, %{state | responders: responders}}
       end
 
@@ -209,7 +215,7 @@ defmodule Hedwig.Robot do
   This function should be called by an adapter when a message arrives. A message
   will be sent to each installed responder.
   """
-  @spec handle_message(pid, Hedwig.Message.t) :: :ok
+  @spec handle_message(pid, Hedwig.Message.t()) :: :ok
   def handle_message(robot, %Hedwig.Message{} = msg) do
     GenServer.cast(robot, msg)
   end
